@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Third party
+    'graphene_django',
 
     # Apps
     'home.apps.HomeConfig',
@@ -133,3 +134,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+# Graphene
+GRAPHENE = {
+    'SCHEMA': 'cremet.schema.schema'
+}

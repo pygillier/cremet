@@ -12,6 +12,7 @@ graphene-django = "==2.8.0"
 django-taggit = "==1.2.0"
 psycopg2-binary = "==2.8.4"
 django-environ = "==0.4.5"
+django-filter = "==2.2.0"
 
 [requires]
 python_version = "3.7"
