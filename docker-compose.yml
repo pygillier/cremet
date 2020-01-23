@@ -1,0 +1,24 @@
+version: "3.6"
+
+services:
+  db:
+    image: mdillon/postgis:11-alpine
+    container_name: database
+    restart: always
+    environment:
+      POSTGRES_USER: cremet_usr
+      POSTGRES_PASSWORD: cremet_pwd
+      POSTGRES_DB: cremet
+    volumes:
+    - ./.data/postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+  pgadmin:
+    image: dockage/phppgadmin
+    container_name: pgadmin
+    ports:
+      - 8080:80
+    environment:
+      PHP_PG_ADMIN_SERVER_HOST: db
+      POSTGRES_PASSWORD: cremet_pwd
+      POSTGRES_DB: cremet
