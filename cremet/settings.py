@@ -18,7 +18,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 env = environ.Env(
     # set casting, default value
-    DEBUG=(bool, False)
+    DEBUG=(bool, False),
+    SENTRY_ENABLED=(bool, False)
 )
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -139,3 +140,14 @@ STATICFILES_DIRS = [
 GRAPHENE = {
     'SCHEMA': 'cremet.schema.schema'
 }
+
+# Sentry
+if not DEBUG and env('SENTRY_ENABLED'):
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    sentry_sdk.init(
+        dsn=env('SENTRY_DSN'),
+        integrations=[DjangoIntegration()],
+        send_default_pii=False
+    )
