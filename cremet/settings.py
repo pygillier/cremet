@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 
     # Third party
     'graphene_django',
+    'guardian',
 
     # Apps
     'home.apps.HomeConfig',
@@ -95,6 +96,12 @@ DATABASES = {
 
 
 AUTH_USER_MODEL = "home.User"
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend', # this is default
+    'guardian.backends.ObjectPermissionBackend',
+)
+
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 

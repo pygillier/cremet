@@ -1,9 +1,11 @@
 from django.db import models
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
 
 class City(models.Model):
     name = models.CharField(max_length=50)
+    slug = models.SlugField(unique=True)
 
     active = models.BooleanField(default=False)
 
@@ -12,6 +14,10 @@ class City(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(City, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = "cities"
