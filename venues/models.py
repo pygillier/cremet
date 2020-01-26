@@ -52,6 +52,7 @@ class Venue(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    @property
     def is_visible(self):
         return (self.active and self.city.active)
 
