@@ -20,10 +20,12 @@ from django.views.decorators.csrf import csrf_exempt
 from .settings import DEBUG
 
 from cremet.schema import schema
+from venues.admin import admin_site
 
 urlpatterns = [
     path('', include('home.urls')),
-    path('admin/', admin.site.urls),
+    path('admin/', admin_site.urls),
+    path('dj_admin/', admin.site.urls),
     path('graphql/', csrf_exempt(
         GraphQLView.as_view(graphiql=DEBUG, schema=schema))),
 ]
