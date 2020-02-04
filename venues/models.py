@@ -7,7 +7,7 @@ class City(models.Model):
     name = models.CharField(max_length=50)
     slug = models.SlugField(unique=True)
 
-    active = models.BooleanField(default=False)
+    active = models.BooleanField('status', default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
