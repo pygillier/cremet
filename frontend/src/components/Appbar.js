@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Navbar() {
+export default function Navbar(props) {
   const classes = useStyles();
 
   return (
@@ -30,7 +30,7 @@ export default function Navbar() {
             <MenuIcon />
           </IconButton>
           <Button color="inherit" className={classes.title} component={RouterLink} to="/">
-            Cremet
+            Cremet@{props.city.name}
           </Button>
           <Button color="inherit" component={RouterLink} to="/cities">
       Cities

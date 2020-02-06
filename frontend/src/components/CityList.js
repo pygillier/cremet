@@ -1,67 +1,98 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
+import {
+  Typography,
+  Grid,
+  Button,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  IconButton,
+} from '@material-ui/core';
+import { Favorite, Add } from '@material-ui/icons';
 import { useQuery } from '@apollo/react-hooks';
-import { ALL_CITIES } from '../queries.js';
+import { Link as RouterLink } from 'react-router-dom';
+import { CITY_LIST_QUERY } from '../queries.js';
 
 
 const useStyles = makeStyles({
+  root: {
+    flexGrow: 1,
+  },
   card: {
     maxWidth: 345,
   },
   media: {
     height: 140,
   },
+  buttons: {
+    justifyContent: 'space-between',
+  }
 });
+
+
 
 export default function CityList(props) {
     const classes = useStyles();
-    const { loading, error, data, refetch } = useQuery(ALL_CITIES);
+    const { loading, error, data, refetch } = useQuery(CITY_LIST_QUERY);
 
     if (loading) return 'Loading...';
     if (error) return `Error! ${error.message}`;
 
-    console.log(data)
+    function setCurrentCity(city) {
+      props.setCurrentCity({name: city.node.name, slug: city.node.slug, id: city.node.id})
+    }
+
+    function isCurrentCity(slug) {
+      return props.currentCity.slug !== slug;
+    }
+
     return(
-        <div>
+      <div className={classes.root}>
+        <Grid container spacing={1}>
+          <Grid item xs={12}>
             <Typography variant="h2">All cities</Typography>
             <Button color="primary" onClick={() => refetch()}>Refetch</Button>
-            {data.allCities.edges.map(city => (
-
-                <Card className={classes.card} key={city.node.id}>
-      <CardActionArea>
-        <CardMedia
-          className={classes.media}
-          image="/static/images/cards/contemplative-reptile.jpg"
-          title="Contemplative Reptile"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {city.node.name}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-      <CardActions>
-        <Button size="small" color="primary">
-          Share
-        </Button>
-        <Button size="small" color="primary">
-          Learn More
-        </Button>
-      </CardActions>
-    </Card>
-
-            ))}
-        </div>
+          </Grid>
+          {data.allCities.edges.map(city => (
+            <Grid item xs={12} sm={4} key={city.node.id}>
+              <Card className={classes.card}>
+                <CardActionArea component={RouterLink} to={`/cities/${city.node.slug}`}>
+                  <CardMedia className={classes.media}
+                    image="/static/images/cards/contemplative-reptile.jpg"
+                    title="Contemplative Reptile"
+                    />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      {city.node.name}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                      There are {city.node.venuesCount} venues in this city.
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+                <CardActions className={classes.buttons}>
+                {isCurrentCity(city.node.slug) &&
+                  <IconButton
+                    size="small"
+                    color="secondary"
+                    onClick={() => setCurrentCity(city)}>
+                    <Favorite/>
+                  </IconButton>
+                }
+                  <IconButton
+                    size="small"
+                    color="action"
+                  >
+                    <Add/>
+                  </IconButton>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </div>
     );
 };
